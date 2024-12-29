@@ -36,7 +36,7 @@ const AdminDashboard = () => {
   const [isStudentsVisible, setIsStudentsVisible] = useState(true);
 
 
-  const API_BASE = "http://localhost:9876/api/class";
+  const API_BASE = "https://school-management-app-thu0.onrender.com/api/class";
 
   useEffect(() => {
     fetchClasses();

@@ -58,16 +58,13 @@ const LoginPage = () => {
       ...prevData,
       [name]: value,
     }));
-    const newLength = value.length;
-    const newWidth = Math.max(200, newLength * 8); // Adjust width as needed, minimum width 200px
-    setInputWidth(newWidth); // Update input width based on content
   };
 
   const handleCreateSubmit = async (event) => {
     event.preventDefault();
     console.log(formData)
     try {
-      const response = await fetch("http://localhost:9876/api/auth/signup", {
+      const response = await fetch("https://school-management-app-thu0.onrender.com/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -110,7 +107,7 @@ const LoginPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("http://localhost:9876/api/auth/login", {
+      const response = await fetch("https://school-management-app-thu0.onrender.com/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

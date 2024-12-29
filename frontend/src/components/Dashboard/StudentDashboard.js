@@ -29,7 +29,7 @@ function App() {
 
   const fetchStudentsAndClasses = async () => {
     try {
-      const response = await fetch("http://localhost:9876/api/student/list"); // Replace with actual API endpoint
+      const response = await fetch("https://school-management-app-thu0.onrender.com/api/student/list"); // Replace with actual API endpoint
       const data = await response.json();
   
       if (response.ok) {
@@ -86,8 +86,8 @@ function App() {
   
       const method = isProfileCreated ? "PUT" : "POST";
       const url = isProfileCreated
-        ? `http://localhost:9876/api/student/update/${profile.id}`
-        : "http://localhost:9876/api/student/create";
+        ? `https://school-management-app-thu0.onrender.com/api/student/update/${profile.id}`
+        : "https://school-management-app-thu0.onrender.com/api/student/create";
   
       const response = await fetch(url, {
         method,

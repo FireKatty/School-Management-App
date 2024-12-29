@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import backgroundImage from "../../images/university-6699377.jpg";
 
-const BASE_URL = "http://localhost:9876/api/teacher";
+const BASE_URL = "https://school-management-app-thu0.onrender.com/api/teacher";
 
 const TeacherProfile = () => {
   const navigate = useNavigate();
