@@ -12,7 +12,7 @@ const StudentSchema = new mongoose.Schema({
         ref: 'Class',
     },
     assignedTeachers: [
-        { type: mongoose.Schema.Types.ObjectId, ref: 'Class' } // Reference to the Class model
+        { type: mongoose.Schema.Types.ObjectId, ref: 'Teacher' } // Reference to the Class model
     ],
   });
   module.exports = mongoose.model('Student', StudentSchema);

@@ -111,7 +111,7 @@ const getAllStudents = async (req, res) => {
     // Query the database with filters, pagination, and population
     const [students, totalStudents] = await Promise.all([
       Student.find(filter)
-        .populate("class", "className year") // Populate class details
+        .populate("class", "className subject year") // Populate class details
         .populate("assignedTeachers", "name subject") // Populate assigned teachers
         .skip((pageNumber - 1) * pageSize)
         .limit(pageSize),

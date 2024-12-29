@@ -30,9 +30,9 @@ const addData = async (req, res) => {
       });
     }
 
-    if (!salary || typeof salary !== "number" || salary <= 0) {
-      return res.status(400).json({ message: "Invalid salary (must be a positive number)" });
-    }
+    // if (!salary || typeof salary !== "number" || salary <= 0) {
+    //   return res.status(400).json({ message: "Invalid salary (must be a positive number)" });
+    // }
 
     if (!subject || typeof subject !== "string" || subject.trim().length === 0) {
       return res.status(400).json({ message: "Invalid subject" });
@@ -42,6 +42,7 @@ const addData = async (req, res) => {
     let newClassId = [];
     // Check if the class for the subject exists
     const newClass = await Class.findOne({ subject });
+    console.log(newClass)
 
     if (newClass && newClass.teacher.length === 0) {
       // console.log(newClass)
@@ -112,7 +113,7 @@ const updateTeacher = async (req, res) => {
     }
 
     // Validate input fields
-    const validationErrors = validateTeacherFields({ name, gender, dob, contact, salary, subject });
+    const validationErrors = validateTeacherFields({ name, gender, dob, contact, subject });
     if (validationErrors.length > 0) {
       return res.status(400).json({ message: validationErrors.join(', ') });
     }
