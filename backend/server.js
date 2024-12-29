@@ -5,7 +5,15 @@ const dotenv = require("dotenv"); // dotenv module to load environment variables
 const app = express(); // Initialize Express application
 
 // Middleware to handle cross-origin requests
-app.use(cors()); // Enable CORS for all routes
+
+const corsOptions = {
+    origin: "https://school-management-app-virid.vercel.app", // Replace with your frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  };
+  
+app.use(cors(corsOptions));// Enable CORS for all routes
+
 
 // Middleware to parse incoming JSON data in requests
 app.use(express.json()); // Automatically parses JSON requests
