@@ -1,393 +1,17 @@
-// import React, { useState } from "react";
-// import ProfileModal from "../ProfileModal";
-// import image from "../../images/19.jpg";
-
-// function App() {
-//   const [profile, setProfile] = useState({
-//     name: "",
-//     subject: "",
-//     gender: "",
-//     dob: "",
-//     contact: "",
-//     feesPaid: false,
-//   });
-
-//   const [isProfileCreated, setIsProfileCreated] = useState(false);
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-//   const [modalType, setModalType] = useState(""); // "create" or "update"
-
-//   const [assignedClasses, setAssignedClasses] = useState([
-//     { className: "Math 101", subject: "Mathematics" },
-//     { className: "Science 202", subject: "Science" },
-//   ]);
-
-//   const handleProfileSave = (newProfile) => {
-//     setProfile(newProfile);
-//     setIsProfileCreated(true);
-//     setIsModalOpen(false);
-//   };
-
-//   const handleLogout = () => {
-//     alert("You have logged out successfully!");
-//     setProfile({
-//       name: "",
-//       subject: "",
-//       gender: "",
-//       dob: "",
-//       contact: "",
-//       feesPaid: false,
-//     });
-//     setIsProfileCreated(false);
-//   };
-
-//   return (
-//     <div className="min-h-screen bg-gray-100 p-6 bg-cover bg-center" style={{ backgroundImage: `url(${image})` }}>
-//       {/* Header Section */}
-//       <div className="bg-gradient-to-r from-blue-500 to-teal-500 bg-opacity-50 shadow-lg p-6 rounded-lg mb-8 flex justify-between items-center space-x-4">
-//         <div className="flex-grow text-center">
-//           <h1 className="text-3xl font-semibold text-white">Student Dashboard</h1>
-//         </div>
-//         {profile.name && (
-//           <div className="flex items-center space-x-4">
-//             <span className="text-xl text-white">Welcome, {profile.name}</span>
-//             <button
-//               onClick={handleLogout}
-//               className="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600 transition"
-//             >
-//               Logout
-//             </button>
-//           </div>
-//         )}
-//         {!profile.name && (
-//           <button
-//             onClick={handleLogout}
-//             className="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600 transition"
-//           >
-//             Logout
-//           </button>
-//         )}
-//       </div>
-
-//       {/* Main Content */}
-//       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-//         {/* Personal Details */}
-//         <div className="bg-white bg-opacity-80 shadow-lg p-6 rounded-lg border border-gray-300 text-center">
-//           <h2 className="text-xl font-semibold text-gray-800 mb-4">Personal Details</h2>
-//           {isProfileCreated ? (
-//             <div className="text-gray-600">
-//               <div className="flex space-x-10 border-b pb-3 mb-3 px-4">
-//                 <strong>Name:</strong>
-//                 <span>{profile.name}</span>
-//               </div>
-//               <div className="flex space-x-7 border-b pb-3 mb-3 px-4">
-//                 <strong>Subject:</strong>
-//                 <span>{profile.subject}</span>
-//               </div>
-//               <div className="flex space-x-7 border-b pb-3 mb-3 px-4">
-//                 <strong>Gender:</strong>
-//                 <span>{profile.gender}</span>
-//               </div>
-//               <div className="flex space-x-12 border-b pb-3 mb-3 px-4">
-//                 <strong>DOB:</strong>
-//                 <span>{profile.dob}</span>
-//               </div>
-//               <div className="flex space-x-6 border-b pb-3 mb-3 px-4">
-//                 <strong>Contact:</strong>
-//                 <span>{profile.contact}</span>
-//               </div>
-//               <div className="flex space-x-3 border-b pb-3 mb-3 px-4">
-//                 <strong>Fees Paid:</strong>
-//                 <span>{profile.feesPaid ? "Yes" : "No"}</span>
-//               </div>
-//               <button
-//                 onClick={() => {
-//                   setModalType("update");
-//                   setIsModalOpen(true);
-//                 }}
-//                 className="bg-green-500 text-white px-6 py-2 rounded w-full mt-4 hover:bg-green-600 transition"
-//               >
-//                 Update Details
-//               </button>
-//             </div>
-//           ) : (
-//             <button
-//               onClick={() => {
-//                 setModalType("create");
-//                 setIsModalOpen(true);
-//               }}
-//               className="bg-blue-500 text-white px-6 py-2 rounded w-full hover:bg-blue-600 transition"
-//             >
-//               Create Personal Details
-//             </button>
-//           )}
-//         </div>
-
-//         {/* Assign Teacher */}
-//         <div className="bg-white bg-opacity-80 shadow-lg p-6 rounded-lg border border-gray-300 text-center">
-//           <h2 className="text-xl font-semibold text-gray-800 mb-4">Assign Teacher</h2>
-//           <div className="text-gray-600">
-//             <div className="flex space-x-7 border-b pb-3 mb-3 px-4">
-//               <strong>Name:</strong>
-//               <span>{profile.name || "Not Assigned"}</span>
-//             </div>
-//             <div className="flex space-x-4 border-b pb-3 mb-3 px-4">
-//               <strong>Subject:</strong>
-//               <span>{profile.subject || "Not Assigned"}</span>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* Assigned Classes */}
-//         <div className="bg-white bg-opacity-80 shadow-lg p-6 rounded-lg border border-gray-300 text-center">
-//           <h2 className="text-xl font-semibold text-gray-800 mb-4">Assigned Classes</h2>
-//           <ul className="space-y-4">
-//             {assignedClasses.map((classItem, index) => (
-//               <li key={index} className="flex space-x-10 text-gray-600 border-b pb-3 mb-3 px-4">
-//                 <span>
-//                   <strong>Class:</strong> {classItem.className}
-//                 </span>
-//                 <span>
-//                   <strong>Subject:</strong> {classItem.subject}
-//                 </span>
-//               </li>
-//             ))}
-//           </ul>
-//         </div>
-//       </div>
-
-//       {/* Profile Modal */}
-//       {isModalOpen && (
-//         <ProfileModal
-//           type={modalType}
-//           profile={profile}
-//           onClose={() => setIsModalOpen(false)}
-//           onSave={handleProfileSave}
-//         />
-//       )}
-//     </div>
-//   );
-// }
-
-// export default App;
-
-
-// import React, { useState } from "react";
-
-// const AdminDashboard = () => {
-//   const [admin, setAdmin] = useState("Abhishek");
-//   const [isEditingAdmin, setIsEditingAdmin] = useState(false);
-//   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
-//   const [formAdminDetails, setFormAdminDetails] = useState({
-//     name: "",
-//     email: "",
-//     contact: "",
-//   });
-
-//   const [teachers, setTeachers] = useState([]);
-//   const [classes, setClasses] = useState([]);
-//   const [students, setStudents] = useState([]);
-
-//   const [isEditingClass, setIsEditingClass] = useState(false);
-//   const [isClassModalOpen, setIsClassModalOpen] = useState(false);
-//   const [formClassDetails, setFormClassDetails] = useState({
-//     className: "",
-//     subject: "",
-//     year: "",
-//   });
-
-//   const [showTeachers, setShowTeachers] = useState(false);
-//   const [showClasses, setShowClasses] = useState(false);
-//   const [showStudents, setShowStudents] = useState(false);
-
-//   const handleInputChange = (e, type) => {
-//     const { name, value } = e.target;
-//     if (type === "admin") {
-//       setFormAdminDetails((prev) => ({
-//         ...prev,
-//         [name]: value,
-//       }));
-//     } else if (type === "class") {
-//       setFormClassDetails((prev) => ({
-//         ...prev,
-//         [name]: value,
-//       }));
-//     }
-//   };
-
-//   const handleAddClass = () => {
-//     setFormClassDetails({
-//       className: "",
-//       subject: "",
-//       year: "",
-//     });
-//     setIsEditingClass(false);
-//     setIsClassModalOpen(true);
-//   };
-
-//   const handleSaveClass = () => {
-//     if (isEditingClass) {
-//       setClasses((prev) =>
-//         prev.map((cls) =>
-//           cls.className === formClassDetails.className ? formClassDetails : cls
-//         )
-//       );
-//     } else {
-//       setClasses((prev) => [...prev, formClassDetails]);
-//     }
-//     setIsClassModalOpen(false);
-//   };
-
-//   const handleFetchTeachers = () => {
-//     setTeachers(
-//       Array.from({ length: 3 }, (_, i) => ({
-//         id: i + 1,
-//         // name: Teacher ${i + 1},
-//       }))
-//     );
-//     setShowTeachers(true);
-//   };
-
-//   const handleFetchStudents = () => {
-//     setStudents(
-//       Array.from({ length: 5 }, (_, i) => ({
-//         id: i + 1,
-//         // name: Student ${i + 1},
-//         class: "10th Grade",
-//         subject: "Mathematics",
-//       }))
-//     );
-//     setShowStudents(true);
-//   };
-
-//   return (
-//     <div className="min-h-screen bg-gray-100 py-8">
-//       <header className="bg-blue-600 text-white py-6 px-6 flex justify-between items-center shadow-lg rounded-t-lg">
-//         <h1 className="text-2xl font-semibold flex-grow text-center">
-//           Admin Dashboard
-//         </h1>
-//         {admin && <span className="mr-4">Welcome, {admin.name}</span>}
-//         <button
-//           onClick={() => alert("Logged out")}
-//           className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-//         >
-//           Logout
-//         </button>
-//       </header>
-
-//       <div className="mt-8 container mx-auto px-4 flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6">
-//         {admin ? (
-//           <>
-//             <div className="bg-white p-6 rounded-lg shadow-xl w-full lg:w-1/3 border border-gray-300">
-//               <h3 className="text-xl font-semibold text-gray-700 mb-4">
-//                 Teachers
-//               </h3>
-//               <button
-//                 onClick={
-//                   showTeachers
-//                     ? () => setShowTeachers(false)
-//                     : handleFetchTeachers
-//                 }
-//                 className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-//               >
-//                 {showTeachers ? "Hide Teachers" : "View Teachers"}
-//               </button>
-//               {showTeachers && (
-//                 <div className="mt-4">
-//                   <ul className="divide-y divide-gray-200">
-//                     {teachers.map((teacher) => (
-//                       <li key={teacher.id} className="py-2 px-4">
-//                         {teacher.name}
-//                       </li>
-//                     ))}
-//                   </ul>
-//                 </div>
-//               )}
-//             </div>
-
-//             <div className="bg-white p-6 rounded-lg shadow-xl w-full lg:w-1/3 border border-gray-300">
-//               <h3 className="text-xl font-semibold text-gray-700 mb-4">
-//                 Classes
-//               </h3>
-//               <button
-//                 onClick={() => setShowClasses(!showClasses)}
-//                 className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
-//               >
-//                 {showClasses ? "Hide Classes" : "View Classes"}
-//               </button>
-//               {showClasses && (
-//                 <div className="mt-4">
-//                   <ul className="divide-y divide-gray-200">
-//                     {classes.map((cls) => (
-//                       <li
-//                         key={cls.className}
-//                         className="py-2 px-4 flex justify-between"
-//                       >
-//                         <span>
-//                           {cls.className} - {cls.subject} ({cls.year})
-//                         </span>
-//                         <div className="flex space-x-2">
-//                           <button className="bg-yellow-500 text-white px-2 py-1 rounded-lg">
-//                             Edit
-//                           </button>
-//                           <button className="bg-red-500 text-white px-2 py-1 rounded-lg">
-//                             Delete
-//                           </button>
-//                         </div>
-//                       </li>
-//                     ))}
-//                   </ul>
-//                 </div>
-//               )}
-//             </div>
-
-//             <div className="bg-white p-6 rounded-lg shadow-xl w-full lg:w-1/3 border border-gray-300">
-//               <h3 className="text-xl font-semibold text-gray-700 mb-4">
-//                 Students
-//               </h3>
-//               <button
-//                 onClick={
-//                   showStudents
-//                     ? () => setShowStudents(false)
-//                     : handleFetchStudents
-//                 }
-//                 className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-//               >
-//                 {showStudents ? "Hide Students" : "View Students"}
-//               </button>
-//               {showStudents && (
-//                 <div className="mt-4">
-//                   <ul className="divide-y divide-gray-200">
-//                     {students.map((student) => (
-//                       <li key={student.id} className="py-2 px-4">
-//                         {student.name} - {student.class} ({student.subject})
-//                       </li>
-//                     ))}
-//                   </ul>
-//                 </div>
-//               )}
-//             </div>
-//           </>
-//         ) : (
-//           <div className="text-center text-xl font-semibold text-gray-700">
-//             Please login to access the dashboard.
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AdminDashboard;
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import backgroundImage from "../../images/rain-1599790.jpg"; 
 
 const AdminDashboard = () => {
+  const data = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
   const [admin, setAdmin] = useState({
-    name: "Abhishek",
-    email: "admin@example.com",
-    contact: "1234567890",
+    name: data.result.fullName,
+    email: data.result.email,
+    contact: data.result.phoneNumber,
   });
+  // const data = JSON.parse(localStorage.getItem('admin'));
+  // setAdmin(data);
   const [isEditingAdmin, setIsEditingAdmin] = useState(false);
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
   const [formAdminDetails, setFormAdminDetails] = useState({
@@ -411,6 +35,101 @@ const AdminDashboard = () => {
   const [isClassesVisible, setIsClassesVisible] = useState(true);
   const [isStudentsVisible, setIsStudentsVisible] = useState(true);
 
+
+  const API_BASE = "http://localhost:9876/api/class";
+
+  useEffect(() => {
+    fetchClasses();
+    fetchTeachers();
+    fetchStudents();
+  }, []);
+
+  const fetchClasses = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/list`);
+      const data = await response.json();
+      setClasses(data);
+    } catch (error) {
+      console.error("Error fetching classes:", error);
+    }
+  };
+
+  const fetchTeachers = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/list`);
+      const data = await response.json();
+      console.log(data)
+      setTeachers(data);
+    } catch (error) {
+      console.error("Error fetching teachers:", error);
+    }
+  };
+
+  const fetchStudents = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/list`);
+      const data = await response.json();
+      // console.log(data[0].students[0])
+      setStudents(data[0].students);
+    } catch (error) {
+      console.error("Error fetching students:", error);
+    }
+  };
+
+  const handleAddClass = () => {
+    setFormClassDetails({
+      className: "",
+      subject: "",
+      year: "",
+    });
+    setIsEditingClass(false);
+    setIsClassModalOpen(true);
+  };
+
+  const handleEditClass = (classData) => {
+    setFormClassDetails(classData);
+    setIsEditingClass(true);
+    setIsClassModalOpen(true);
+  };
+
+  const handleSaveClass = async () => {
+    try {
+      const method = isEditingClass ? "PUT" : "POST";
+      const url = isEditingClass
+        ? `${API_BASE}/update/${formClassDetails._id}`
+        : `${API_BASE}/create`;
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formClassDetails),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error saving class");
+      }
+
+      setIsClassModalOpen(false);
+      fetchClasses();
+    } catch (error) {
+      console.error("Error saving class:", error);
+    }
+  };
+
+  const handleDeleteClass = async (classId) => {
+    try {
+      await fetch(`${API_BASE}/delete/${classId}`, {
+        method: "DELETE",
+      });
+      fetchClasses();
+    } catch (error) {
+      console.error("Error deleting class:", error);
+    }
+  };
+
+
   const handleInputChange = (e, type) => {
     const { name, value } = e.target;
     if (type === "admin") {
@@ -426,15 +145,7 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleAddAdmin = () => {
-    setFormAdminDetails({
-      name: "",
-      email: "",
-      contact: "",
-    });
-    setIsEditingAdmin(false);
-    setIsAdminModalOpen(true);
-  };
+
 
   const handleEditAdmin = () => {
     setFormAdminDetails(admin); // Pre-fill fields with admin's information
@@ -442,69 +153,18 @@ const AdminDashboard = () => {
     setIsAdminModalOpen(true);
   };
 
-  const handleSaveAdmin = () => {
-    setAdmin({
-      ...formAdminDetails,
-    });
-    setIsAdminModalOpen(false);
-  };
+  const onLogout = ()=>{
+    localStorage.clear();
+    navigate('/');
+  }
+
+  
 
   const handleDeleteAdmin = () => {
     setAdmin(null);
     alert("Admin profile deleted!");
   };
-
-  const handleAddClass = () => {
-    setFormClassDetails({
-      className: "",
-      subject: "",
-      year: "",
-    });
-    setIsEditingClass(false);
-    setIsClassModalOpen(true);
-  };
-
-  const handleEditClass = (classData) => {
-    setFormClassDetails(classData); // Pre-fill fields with class information
-    setIsEditingClass(true);
-    setIsClassModalOpen(true);
-  };
-
-  const handleSaveClass = () => {
-    if (isEditingClass) {
-      setClasses((prev) =>
-        prev.map((cls) =>
-          cls.className === formClassDetails.className ? formClassDetails : cls
-        )
-      );
-    } else {
-      setClasses((prev) => [...prev, formClassDetails]);
-    }
-    setIsClassModalOpen(false);
-  };
-
-  const handleDeleteClass = (className) => {
-    setClasses((prev) => prev.filter((cls) => cls.className !== className));
-    alert("Class deleted!");
-  };
-
-  const handleFetchTeachers = () => {
-    const fetchedTeachers = Array.from({ length: 3 }, (_, i) => ({
-      id: i + 1,
-      // name: Teacher ${i + 1},
-    }));
-    setTeachers(fetchedTeachers);
-  };
-
-  const handleFetchStudents = () => {
-    const fetchedStudents = Array.from({ length: 5 }, (_, i) => ({
-      id: i + 1,
-      // name: Student ${i + 1},
-      class: "10th Grade",
-      subject: "Mathematics",
-    }));
-    setStudents(fetchedStudents);
-  };
+  
 
   return (
     <div className="min-h-screen bg-gray-100 py-8 bg-cover bg-center relative  bg-opacity-50" style={{ backgroundImage: `url(${backgroundImage})` }}>
@@ -515,7 +175,7 @@ const AdminDashboard = () => {
         </h1>
         {admin && <span className="mr-4 text-lg font-medium text-yellow-300">Welcome, {admin.name}</span>}
         <button
-          onClick={() => alert("Logged out")}
+          onClick={onLogout}
           className="bg-red-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-red-700 focus:outline-none transition duration-300 ease-in-out transform hover:scale-105 "
         >
           Logout
@@ -664,7 +324,7 @@ const AdminDashboard = () => {
                     <ul className="divide-y divide-gray-200">
                       {students.map((student) => (
                         <li key={student.id} className="py-2 px-4">
-                          {student.name} - {student.class} ({student.subject})
+                          {student.name} - ({student.subject})
                         </li>
                       ))}
                     </ul>

@@ -237,7 +237,7 @@ const getAllClasses = async (req, res) => {
     const classes = await Class.find()
       .populate({
         path: 'students',           // Populating the 'students' field
-        select: 'name rollNumber'   // Optional: Select specific fields to return (e.g., name, rollNumber)
+        // select: 'name rollNumber'   // Optional: Select specific fields to return (e.g., name, rollNumber)
       })
       .populate({
         path: 'teacher',            // Populating the 'teacher' field
@@ -245,7 +245,7 @@ const getAllClasses = async (req, res) => {
       })
       .populate({
         path: 'studentFees',        // Populating the 'studentFees' field
-        select: 'feeStatus amount'  // Optional: Select specific fields to return (e.g., feeStatus, amount)
+        // select: 'feeStatus amount'  // Optional: Select specific fields to return (e.g., feeStatus, amount)
       });
 
     // Return the populated classes data

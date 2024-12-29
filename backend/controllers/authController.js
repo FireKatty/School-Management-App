@@ -13,14 +13,14 @@ const generateToken = (userId)=>{
 const signup = async (req, res) => {
     try {
         console.log(req.body)
-      const { firstName,lastName, email, phoneNumber, password, confirmPassword, role } = req.body;
+      const {fullName, email, phoneNumber, password, role } = req.body;
       // console.log(confirmPassword)
 
   
       // Check if passwords match
-      if (password !== confirmPassword) {
-        return res.status(400).json({ error: "Passwords do not match" });
-      }
+      // if (password !== confirmPassword) {
+      //   return res.status(400).json({ error: "Passwords do not match" });
+      // }
   
       // Check if the username already exists
       const existingUser = await User.findOne({ email });
@@ -43,8 +43,7 @@ const signup = async (req, res) => {
   
       // Create a new user
       const newUser = new User({
-        s_no: newSNo,
-        fullName : firstName+" "+lastName,
+        fullName,
         email,
         phoneNumber,
         password: hashedPassword, // Store the hashed password
@@ -101,7 +100,7 @@ const check_email =  async (req, res) => {
 
 const login = async(req,res)=>{
     try {
-        // console.log(req.body)
+        console.log(req.body)
         const {email,password} = req.body;
         const user = await User.findOne({email});
         const isPasswordCorrect = await bcrypt.compare(password,user?.password|| "");
@@ -111,6 +110,7 @@ const login = async(req,res)=>{
         }
 
         const token = generateToken(user._id);
+        console.log(user)
         // console.log(token)
         res.send({result:user,auth:token});
     
