@@ -36,7 +36,7 @@ const AdminDashboard = () => {
   const [isStudentsVisible, setIsStudentsVisible] = useState(true);
 
 
-  const API_BASE = "https://school-management-app-thu0.onrender.com/api/class";
+  const API_BASE = "https://school-management-app-thu0.onrender.com/api";
 
   useEffect(() => {
     fetchClasses();
@@ -46,7 +46,7 @@ const AdminDashboard = () => {
 
   const fetchClasses = async () => {
     try {
-      const response = await fetch(`${API_BASE}/list`);
+      const response = await fetch(`${API_BASE}/class/list`);
       const data = await response.json();
       setClasses(data);
     } catch (error) {
@@ -56,7 +56,7 @@ const AdminDashboard = () => {
 
   const fetchTeachers = async () => {
     try {
-      const response = await fetch(`${API_BASE}/list`);
+      const response = await fetch(`${API_BASE}/teacher/getData`);
       const data = await response.json();
       console.log(data)
       setTeachers(data);
@@ -67,10 +67,10 @@ const AdminDashboard = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await fetch(`${API_BASE}/list`);
+      const response = await fetch(`${API_BASE}/student/list`);
       const data = await response.json();
       // console.log(data[0].students[0])
-      setStudents(data[0].students);
+      setStudents(data);
     } catch (error) {
       console.error("Error fetching students:", error);
     }
