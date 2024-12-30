@@ -6,13 +6,31 @@ const app = express(); // Initialize Express application
 
 // Middleware to handle cross-origin requests
 
-const corsOptions = {
-    origin: "https://school-management-app-virid.vercel.app/", // Replace with your frontend URL
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  };
+// const corsOptions = {
+//     origin: "https://school-management-app-virid.vercel.app/", // Replace with your frontend URL
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//     allowedHeaders: ["Content-Type", "Authorization"],
+//   };
   
-app.use(cors(corsOptions));// Enable CORS for all routes
+// app.use(cors(corsOptions));// Enable CORS for all routes
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'https://school-management-app-thu0.onrender.com',
+      'https://school-management-zh9v72d9u-abhishek-katiyars-projects-97d0705a.vercel.app',
+    ];
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+};
+
+app.use(cors(corsOptions));
+
 
 
 // Middleware to parse incoming JSON data in requests
