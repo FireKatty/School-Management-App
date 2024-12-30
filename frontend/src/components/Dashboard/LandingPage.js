@@ -41,7 +41,7 @@ const LoginPage = () => {
   const handleCreateSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("http://localhost:9876/api/auth/signup", {
+      const response = await fetch("https://school-management-app-thu0.onrender.com/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -94,7 +94,7 @@ const LoginPage = () => {
   
     try {
       // API call to login
-      const response = await fetch("http://localhost:9876/api/auth/login", {
+      const response = await fetch("https://school-management-app-thu0.onrender.com/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
