@@ -3,168 +3,164 @@ import { useNavigate } from "react-router-dom";
 import backgroundImage from "../../images/rain-1599790.jpg"; 
 
 const AdminDashboard = () => {
-  const data = JSON.parse(localStorage.getItem("user"));
-  const navigate = useNavigate();
-  const [admin, setAdmin] = useState({
-    name: data.result.fullName,
-    email: data.result.email,
-    contact: data.result.phoneNumber,
-  });
-  // const data = JSON.parse(localStorage.getItem('admin'));
-  // setAdmin(data);
-  const [isEditingAdmin, setIsEditingAdmin] = useState(false);
-  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
-  const [formAdminDetails, setFormAdminDetails] = useState({
-    name: "",
-    email: "",
-    contact: "",
-  });
-  const [teachers, setTeachers] = useState([]);
-  const [classes, setClasses] = useState([]);
-  const [students, setStudents] = useState([]);
+ const data = JSON.parse(localStorage.getItem("user"));
+const navigate = useNavigate();
 
-  const [isEditingClass, setIsEditingClass] = useState(false);
-  const [isClassModalOpen, setIsClassModalOpen] = useState(false);
-  const [formClassDetails, setFormClassDetails] = useState({
+// Initialize the admin state with data from localStorage
+const [admin, setAdmin] = useState({
+  id: data?.result?._id || '',
+  name: data?.result?.fullName || '',
+  email: data?.result?.email || '',
+  contact: data?.result?.phoneNumber || '',
+});
+
+const [teachers, setTeachers] = useState([]);
+const [classes, setClasses] = useState([]);
+const [students, setStudents] = useState([]);
+const [isEditingClass, setIsEditingClass] = useState(false);
+const [isClassModalOpen, setIsClassModalOpen] = useState(false);
+const [formClassDetails, setFormClassDetails] = useState({
+  className: "",
+  subject: "",
+  year: "",
+});
+const [isTeachersVisible, setIsTeachersVisible] = useState(true);
+const [isClassesVisible, setIsClassesVisible] = useState(true);
+const [isStudentsVisible, setIsStudentsVisible] = useState(true);
+
+const API_BASE = "https://school-management-app-thu0.onrender.com/api";
+
+useEffect(() => {
+  fetchClasses();
+  fetchTeachers();
+  fetchStudents();
+}, []);
+
+const fetchClasses = async () => {
+  try {
+    const response = await fetch(`${API_BASE}/class/list`);
+    const data = await response.json();
+    setClasses(data);
+  } catch (error) {
+    console.error("Error fetching classes:", error);
+  }
+};
+
+const fetchTeachers = async () => {
+  try {
+    const response = await fetch(`${API_BASE}/teacher/getData`);
+    const data = await response.json();
+    console.log(data);
+    setTeachers(data.teachers);
+  } catch (error) {
+    console.error("Error fetching teachers:", error);
+  }
+};
+
+const fetchStudents = async () => {
+  try {
+    const response = await fetch(`${API_BASE}/student/list`);
+    const data = await response.json();
+    console.log(data.students);
+    setStudents(data.students);
+  } catch (error) {
+    console.error("Error fetching students:", error);
+  }
+};
+
+const handleAddClass = () => {
+  setFormClassDetails({
     className: "",
     subject: "",
     year: "",
   });
+  setIsEditingClass(false);
+  setIsClassModalOpen(true);
+};
 
-  const [isTeachersVisible, setIsTeachersVisible] = useState(true);
-  const [isClassesVisible, setIsClassesVisible] = useState(true);
-  const [isStudentsVisible, setIsStudentsVisible] = useState(true);
+const handleEditClass = (classData) => {
+  setFormClassDetails(classData);
+  setIsEditingClass(true);
+  setIsClassModalOpen(true);
+};
 
+const handleSaveClass = async () => {
+  try {
+    const method = isEditingClass ? "PUT" : "POST";
+    const url = isEditingClass
+      ? `${API_BASE}/class/update/${formClassDetails._id}`
+      : `${API_BASE}/class/create`;
 
-  const API_BASE = "https://school-management-app-thu0.onrender.com/api";
-
-  useEffect(() => {
-    fetchClasses();
-    fetchTeachers();
-    fetchStudents();
-  }, []);
-
-  const fetchClasses = async () => {
-    try {
-      const response = await fetch(`${API_BASE}/class/list`);
-      const data = await response.json();
-      setClasses(data);
-    } catch (error) {
-      console.error("Error fetching classes:", error);
-    }
-  };
-
-  const fetchTeachers = async () => {
-    try {
-      const response = await fetch(`${API_BASE}/teacher/getData`);
-      const data = await response.json();
-      console.log(data)
-      setTeachers(data);
-    } catch (error) {
-      console.error("Error fetching teachers:", error);
-    }
-  };
-
-  const fetchStudents = async () => {
-    try {
-      const response = await fetch(`${API_BASE}/student/list`);
-      const data = await response.json();
-      // console.log(data[0].students[0])
-      setStudents(data);
-    } catch (error) {
-      console.error("Error fetching students:", error);
-    }
-  };
-
-  const handleAddClass = () => {
-    setFormClassDetails({
-      className: "",
-      subject: "",
-      year: "",
+    const response = await fetch(url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formClassDetails),
     });
-    setIsEditingClass(false);
-    setIsClassModalOpen(true);
-  };
 
-  const handleEditClass = (classData) => {
-    setFormClassDetails(classData);
-    setIsEditingClass(true);
-    setIsClassModalOpen(true);
-  };
-
-  const handleSaveClass = async () => {
-    try {
-      const method = isEditingClass ? "PUT" : "POST";
-      const url = isEditingClass
-        ? `${API_BASE}/update/${formClassDetails._id}`
-        : `${API_BASE}/create`;
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formClassDetails),
-      });
-
-      if (!response.ok) {
-        throw new Error("Error saving class");
-      }
-
-      setIsClassModalOpen(false);
-      fetchClasses();
-    } catch (error) {
-      console.error("Error saving class:", error);
+    if (!response.ok) {
+      throw new Error("Error saving class");
     }
-  };
 
-  const handleDeleteClass = async (classId) => {
-    try {
-      await fetch(`${API_BASE}/delete/${classId}`, {
-        method: "DELETE",
-      });
-      fetchClasses();
-    } catch (error) {
-      console.error("Error deleting class:", error);
-    }
-  };
-
-
-  const handleInputChange = (e, type) => {
-    const { name, value } = e.target;
-    if (type === "admin") {
-      setFormAdminDetails((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    } else if (type === "class") {
-      setFormClassDetails((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-  };
-
-
-
-  const handleEditAdmin = () => {
-    setFormAdminDetails(admin); // Pre-fill fields with admin's information
-    setIsEditingAdmin(true);
-    setIsAdminModalOpen(true);
-  };
-
-  const onLogout = ()=>{
-    localStorage.clear();
-    navigate('/');
+    setIsClassModalOpen(false);
+    fetchClasses();
+  } catch (error) {
+    console.error("Error saving class:", error);
   }
+};
 
-  
+const handleDeleteClass = async (classId) => {
+  try {
+    await fetch(`${API_BASE}/class/delete/${classId}`, {
+      method: "DELETE",
+    });
+    fetchClasses();
+  } catch (error) {
+    console.error("Error deleting class:", error);
+  }
+};
 
-  const handleDeleteAdmin = () => {
-    setAdmin(null);
-    alert("Admin profile deleted!");
-  };
-  
+const handleInputChange = (e, type) => {
+  const { name, value } = e.target;
+  if (type === "admin") {
+    setFormAdminDetails((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  } else if (type === "class") {
+    setFormClassDetails((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+};
+
+// const [isEditingAdmin, setIsEditingAdmin] = useState(false);
+// const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+const [formAdminDetails, setFormAdminDetails] = useState({
+  name: admin.name,
+  email: admin.email,
+  contact: admin.contact,
+});
+
+// const handleEditAdmin = () => {
+//   setFormAdminDetails(admin); // Pre-fill fields with admin's information
+//   setIsEditingAdmin(true);
+//   setIsAdminModalOpen(true);
+// };
+
+const onLogout = () => {
+  localStorage.clear();
+  navigate('/');
+};
+
+// const handleDeleteAdmin = () => {
+//   localStorage.clear();
+//   alert("Admin profile deleted!");
+//   navigate("/");
+// };
+
 
   return (
     <div className="min-h-screen bg-gray-100 py-8 bg-cover bg-center relative  bg-opacity-50" style={{ backgroundImage: `url(${backgroundImage})` }}>
@@ -205,7 +201,7 @@ const AdminDashboard = () => {
               </p>
 
               {/* Profile action buttons */}
-              <div className="flex space-x-4 mt-4">
+              {/* <div className="flex space-x-4 mt-4">
                 <button
                   onClick={handleEditAdmin}
                   className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600"
@@ -218,7 +214,7 @@ const AdminDashboard = () => {
                 >
                   Delete Profile
                 </button>
-              </div>
+              </div> */}
             </div>
 
             {/* View Teachers Section */}
@@ -239,7 +235,7 @@ const AdminDashboard = () => {
                     <ul className="divide-y divide-gray-200">
                       {teachers.map((teacher) => (
                         <li key={teacher.id} className="py-2 px-4">
-                          {teacher.name}
+                          {teacher.name} - ({teacher.subject})
                         </li>
                       ))}
                     </ul>
