@@ -18,7 +18,8 @@ const corsOptions = {
   origin: function (origin, callback) {
     const allowedOrigins = [
       'https://school-management-app-thu0.onrender.com',
-      'https://school-management-zh9v72d9u-abhishek-katiyars-projects-97d0705a.vercel.app',
+      'https://school-management-app-virid.vercel.app',
+      // 'https://school-management-zh9v72d9u-abhishek-katiyars-projects-97d0705a.vercel.app',
     ];
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
