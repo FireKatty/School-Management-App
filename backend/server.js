@@ -7,7 +7,7 @@ const app = express(); // Initialize Express application
 // Middleware to handle cross-origin requests
 
 const corsOptions = {
-    origin: "https://school-management-app-virid.vercel.app", // Replace with your frontend URL
+    origin: "https://school-management-app-virid.vercel.app/", // Replace with your frontend URL
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   };
