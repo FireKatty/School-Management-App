@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import backgroundImage from "../../images/university-6699377.jpg";
 import { useNavigate } from "react-router-dom";
 
@@ -10,14 +10,6 @@ const LoginPage = () => {
   const [heading, setHeading] = useState("Create New Student"); // Dynamic heading state
   const [formData, setFormData] = useState({}); // Store form data
   const navigate = useNavigate();
-  const auth = localStorage.getItem("token");
-  const data = JSON.parse(localStorage.getItem("user"));
-
-  // useEffect(() => {
-  //   if (auth) {
-  //       navigate("/admin");
-  //   }
-  // }, [auth, navigate]);
 
   const handleCreateClick = (selectedRole) => {
     setIsCreating(true);
@@ -38,20 +30,6 @@ const LoginPage = () => {
   };
 
 
-  useEffect(() => {
-    if (auth) {
-      if (data.result.role === "student")
-      {
-        navigate("/student");
-      } else  if (data.result.role === "teacher"){
-        navigate("/teacher");
-      } else {
-        navigate("/");
-      }
-    }
-  });
-
-
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
@@ -62,87 +40,110 @@ const LoginPage = () => {
 
   const handleCreateSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData)
     try {
-      const response = await fetch("https://school-management-app-thu0.onrender.com/api/auth/signup", {
+      const response = await fetch("http://localhost:9876/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ ...formData, role }),
       });
+  
       if (response.ok) {
         const data = await response.json();
-        if (data.auth) {
-          localStorage.setItem('user', JSON.stringify(data));
-          localStorage.setItem('token', JSON.stringify(data));
-          if (data.auth) {
-            if (data.result.role === "student")
-            {
-              navigate("/student");
-            } else  if (data.result.role === "teacher"){
-              navigate("/teacher");
-            } else if  (data.result.role ==="admin"){
+        localStorage.setItem("user", JSON.stringify(data)); 
+        console.log("API Response:", data);
+  
+        if (data.result && data.result.role) {
+          // Role-based navigation
+          switch (data.result.role) {
+            case "admin":
+              console.log("admin")
               navigate("/admin");
-            }else{
-              navigate("/")
-            }
-          }// Navigate to the home page
+              break;
+            case "teacher":
+              console.log("teacher")
+              navigate("/teacher");
+              break;
+            case "student":
+              console.log("student")
+              navigate("/student");
+              break;
+            default:
+              navigate("/");
+          }
+          console.log("User created successfully:", data);
+        } else {
+          console.error("Role not found in API response:", data);
+          alert("Failed to retrieve role information. Please try again.");
         }
-        console.log("User created successfully:", data);
-        alert("User created successfully!");
-
-        // handleBackToLogin(); // Reset to login after successful creation
       } else {
         const errorData = await response.json();
-        console.error("Error creating user:", errorData);
+        console.error("API error response:", errorData);
         alert(`Error: ${errorData.message || "Failed to create user."}`);
       }
     } catch (error) {
       console.error("Error during creation API call:", error);
-      alert("An error occurred while creating the user. Please try again later.");
+      alert("An unexpected error occurred. Please try again later.");
     }
   };
+  
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    event.preventDefault(); // Prevent default form submission behavior
+  
     try {
-      const response = await fetch("https://school-management-app-thu0.onrender.com/api/auth/login", {
+      // API call to login
+      const response = await fetch("http://localhost:9876/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData), // Sending form data
       });
+  
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem('user', JSON.stringify(data));
-        localStorage.setItem('token', JSON.stringify(data.auth));
+        localStorage.setItem("user", JSON.stringify(data));
+
         console.log("Login successful:", data);
-        if (data.auth) {
-          if (data.result.role === "student")
-          {
-            navigate("/student");
-          } else  if (data.result.role === "teacher"){
-            navigate("/teacher");
-          } else if (data.result.role === "admin"){
-            navigate("/admin");
-          }else{
-            navigate("/");
+  
+        // Check if role exists in the response
+        if (data?.result?.role) {
+          const userRole = data.result.role;
+          // Role-based navigation
+          switch (userRole) {
+            case "admin":
+              console.log("admin")
+              navigate("/admin");
+              break;
+            case "teacher":
+              console.log("teacher")
+              navigate("/teacher");
+              break;
+            case "student":
+              console.log("student")
+              navigate("/student");
+              break;
+            default:
+              console.warn("Unexpected role:", userRole);
+              navigate("/");
           }
+        } else {
+          console.error("Role not found in response:", data);
+          alert("Login failed: Unable to determine user role.");
         }
-        // alert("Login successful!");
-        // Navigate to dashboard or another page
       } else {
         const errorData = await response.json();
-        console.error("Error during login:", errorData);
-        alert(`Error: ${errorData.message || "Login failed."}`);
+        console.error("API error response:", errorData);
+        alert(`Error: ${errorData.message || "Login failed. Please try again."}`);
       }
     } catch (error) {
       console.error("Error during login API call:", error);
-      alert("An error occurred while logging in. Please try again later.");
+      alert("An unexpected error occurred. Please try again later.");
     }
   };
+  
 
 
   return (
